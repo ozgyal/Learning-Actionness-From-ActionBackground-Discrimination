@@ -65,8 +65,9 @@ if __name__ == '__main__':
 
     # Video and text feature extraction
     dataloader = get_dataloader(args, task_steps, task_steps_all)
-    feature = Feature(dataloader, args.net_weights_path, args.use_gpu, args.word2vec_path)
-    feature.extract()  # Extracts and saves features in given directory
+    feature = Feature(dataloader, args.net_weights_path, args.use_gpu, args.word2vec_path,
+                      args.video_features_directory)
+    feature.extract_video_features()  # Extracts and saves video features in given directory
 
     # TODO
     # Get baseline scores/calculations for both test and validation

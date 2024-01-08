@@ -93,7 +93,7 @@ class VideoDataset(Dataset):
                 .run(capture_stdout=True, quiet=True)
         )
         video = np.frombuffer(out, np.uint8).reshape([-1, self.size, self.size, 3])
-        video = th.from_numpy(video)
+        video = th.from_numpy(np.array(video))
         video = video.permute(3, 0, 1, 2)
         if video.shape[1] < self.num_frames:
             zeros = th.zeros((3, self.num_frames - video.shape[1], self.size, self.size), dtype=th.uint8)
