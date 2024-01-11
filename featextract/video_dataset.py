@@ -1,4 +1,4 @@
-"""Dataset class is based on: https://github.com/antoine77340/MIL-NCE_HowTo100M"""
+"""VideoDataset class is based on: https://github.com/antoine77340/MIL-NCE_HowTo100M"""
 
 import torch as th
 from torch.utils.data import Dataset
@@ -7,7 +7,6 @@ import os
 import numpy as np
 import random
 import ffmpeg
-import re
 import subprocess
 
 
@@ -17,27 +16,21 @@ class VideoDataset(Dataset):
     def __init__(
             self,
             video_list,
-            task_steps,
-            task_steps_all,
-            videos_directory,
+            videos_path,
             fps,
             num_frames,
             frame_size,
             crop_only,
             center_crop,
-            token_to_word_path='featextract/data/dict.npy',
             benchmark=False,
             random_left_right_flip=False,
-            max_words=4,
     ):
         """
         Args:
         """
         assert isinstance(frame_size, int)
         self.video_list = pd.read_csv(video_list)
-        self.task_steps = task_steps
-        self.task_steps_all = task_steps_all
-        self.videos_directory = videos_directory
+        self.videos_path = videos_path
         self.size = frame_size
         self.num_frames = num_frames
         self.fps = fps
@@ -46,11 +39,6 @@ class VideoDataset(Dataset):
         self.center_crop = center_crop
         self.benchmark = benchmark
         self.random_flip = random_left_right_flip
-        self.max_words = max_words
-        token_to_word = np.load(token_to_word_path)
-        self.word_to_token = {}
-        for i, t in enumerate(token_to_word):
-            self.word_to_token[t] = i + 1
 
     def __len__(self):
         return len(self.video_list)
@@ -100,39 +88,13 @@ class VideoDataset(Dataset):
             video = th.cat((video, zeros), axis=1)
         return video[:, :self.num_frames]
 
-    def _split_text(self, sentence):
-        w = re.findall(r"[\w']+", str(sentence))
-        return w
-
-    def _words_to_token(self, words):
-        words = [self.word_to_token[word] for word in words if word in self.word_to_token]
-        if words:
-            we = self._zero_pad_tensor_token(th.LongTensor(words), self.max_words)
-            return we
-        else:
-            return th.zeros(self.max_words).long()
-
-    def _zero_pad_tensor_token(self, tensor, size):
-        if len(tensor) >= size:
-            return tensor[:size]
-        else:
-            zero = th.zeros(size - len(tensor)).long()
-            return th.cat((tensor, zero), dim=0)
-
-    def words_to_ids(self, x):
-        return self._words_to_token(self._split_text(x))
-
-    def _get_task_steps(self, steps):
-        steps = [self.words_to_ids(step) for step in steps]
-        return steps
-
     def _get_video_path(self, video_id):
-        if os.path.isfile(os.path.join(self.videos_directory, video_id + '.mp4')):
-            video_path = os.path.join(self.videos_directory, video_id + '.mp4')
-        elif os.path.isfile(os.path.join(self.videos_directory, video_id + '.mkv')):
-            video_path = os.path.join(self.videos_directory, video_id + '.mkv')
-        elif os.path.isfile(os.path.join(self.videos_directory, video_id + '.webm')):
-            video_path = os.path.join(self.videos_directory, video_id + '.webm')
+        if os.path.isfile(os.path.join(self.videos_path, video_id + '.mp4')):
+            video_path = os.path.join(self.videos_path, video_id + '.mp4')
+        elif os.path.isfile(os.path.join(self.videos_path, video_id + '.mkv')):
+            video_path = os.path.join(self.videos_path, video_id + '.mkv')
+        elif os.path.isfile(os.path.join(self.videos_path, video_id + '.webm')):
+            video_path = os.path.join(self.videos_path, video_id + '.webm')
         else:
             raise ValueError
 
