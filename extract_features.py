@@ -89,7 +89,7 @@ if __name__ == '__main__':
     video_dataset = get_video_dataset(all_arguments)
     video_dataloader = get_dataloader(all_arguments, video_dataset)
     video_feature = get_video_feature(all_arguments, video_dataloader)
-    # video_feature.extract_features()  # Extracts and saves video features into the given directory
+    video_feature.extract_features()  # Extracts and saves video features into the given directory
 
     # Text feature extraction
     task_based_steps = read_task_info(all_arguments.task_list)['steps']  # individual task steps for each task
