@@ -27,7 +27,7 @@ def read_task_info(task_list):  # this code piece is taken from: https://github.
     return {'title': titles, 'url': urls, 'n_steps': n_steps, 'steps': steps}
 
 
-def get_all_steps(steps):
+def get_all_unique_steps(steps):
     all_steps = list()
     for task in steps:
         for step in steps[task]:
@@ -93,8 +93,8 @@ if __name__ == '__main__':
     video_feature.extract_features()  # Extracts and saves video features into the given directory
 
     # Text feature extraction
-    task_based_steps = read_task_info(all_arguments.task_list)['steps']  # individual task steps for each task
-    steps = get_all_steps(task_based_steps)  # all unique steps concatenated
+    task_based_steps = read_task_info(all_arguments.task_list)['steps']  # steps for each task
+    steps = get_all_unique_steps(task_based_steps)  # all unique steps concatenated
     text_dataset = get_text_dataset(all_arguments, steps)
     text_dataloader = get_dataloader(all_arguments, text_dataset)
     text_feature = get_text_feature(all_arguments, text_dataloader)
