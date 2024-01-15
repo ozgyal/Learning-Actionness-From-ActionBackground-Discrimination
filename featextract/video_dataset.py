@@ -103,7 +103,6 @@ class VideoDataset(Dataset):
     def __getitem__(self, idx):
         video_id = self.video_list['video_id'][idx]
         video_path = self._get_video_path(video_id)
-        task_id = str(self.video_list['task_id'].values[idx])
 
         result = subprocess.run(
             ['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'default=noprint_wrappers=1:nokey=1',
@@ -112,5 +111,5 @@ class VideoDataset(Dataset):
 
         video = self._get_video(video_path, video_duration)
 
-        return {'video': video, 'video_id': video_id, 'task_id': task_id}
+        return {'video': video, 'video_id': video_id}
 

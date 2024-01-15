@@ -5,10 +5,10 @@ from featextract.feature import Feature
 
 
 class VideoFeature(Feature):
-    def __init__(self, dataloader, net_weights_path, use_gpu, word2vec_path, video_features_path):
+    def __init__(self, dataloader, net_weights_path, use_gpu, word2vec_path, dict_path, video_features_path):
         self._video_features_path = video_features_path
 
-        super().__init__(dataloader, net_weights_path, use_gpu, word2vec_path)
+        super().__init__(dataloader, net_weights_path, use_gpu, word2vec_path, dict_path)
 
     def extract_features(self):
 

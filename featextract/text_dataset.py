@@ -7,10 +7,10 @@ import re
 
 
 class TextDataset(Dataset):
-    def __init__(self, steps, token_to_word_path, max_words):
+    def __init__(self, steps, dict_path, max_words):
         self.steps = steps
         self.max_words = max_words
-        token_to_word = np.load(token_to_word_path)
+        token_to_word = np.load(dict_path)
         self.word_to_token = {}
         for i, t in enumerate(token_to_word):
             self.word_to_token[t] = i + 1
