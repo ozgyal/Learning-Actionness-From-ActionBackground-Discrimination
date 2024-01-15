@@ -31,9 +31,10 @@ def get_all_steps(steps):
     all_steps = list()
     for task in steps:
         for step in steps[task]:
-            all_steps.append(step)
+            if step not in all_steps:
+                all_steps.append(step)
 
-    return list(set(all_steps))
+    return all_steps
 
 
 def get_dataloader(args, dataset):
