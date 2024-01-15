@@ -43,6 +43,6 @@ class TextDataset(Dataset):
     def __getitem__(self, idx):
 
         step_name = self.steps[idx]
-        step_ids = self._words_to_ids(self.steps[idx])
+        step_word_ids = self._words_to_ids(self.steps[idx])
 
-        return {'step_name': step_name, 'step_ids': step_ids}
+        return {'step_name': step_name, 'step_word_ids': step_word_ids}

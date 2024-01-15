@@ -1,5 +1,5 @@
 import torch as th
-import os.path
+import os
 
 from featextract.feature import Feature
 
